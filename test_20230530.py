@@ -51,3 +51,47 @@ class UndergroundSystem:
         # Digress from the topic at hand, This kind of action is usually called a "query", which it aims to search or ask for some information instead of adding to or editing the existing information in this class. Once the function gets a "query" (here the "query" is (startStation, endStation) ), it will try to find "key"s in its data structures, and extract/calculate the corresponding "value" (here the "value" is the average time between startStation and endStation). You will meet "query", "key", "value" (or "q, k, v" in abbreviation) in the famous Transformer paper (https://arxiv.org/abs/1706.03762). Although they are used very differently, they actually share the same thoughts behind: you find the right "key" based on the "query", and then you extract/compute the "value" corresponding to the "key".
 
         pass # delete this line after you complete the codes
+
+
+# Below are some unit test codes, do not mind them. Just run the python file after you finished the codes then you will see whether your software succeed in three cities around the world!
+############################################################################################################
+
+import unittest
+
+class TestUndergroundSystem(unittest.TestCase):
+    def __init__(self, func_list, input_args, output_list, testName = 'run_test', testId = 'test') -> None:
+        super(TestUndergroundSystem, self).__init__(testName)
+        self.func_list = func_list
+        self.input_args = input_args
+        self.output_list = output_list
+        self.testId = testId
+
+    def setUp(self):
+        self.ugsys = UndergroundSystem()
+
+    def tearDown(self) -> None:
+        return super().tearDown()
+    
+    def run_test(self):
+        for i in range(len(self.func_list)):
+            f = getattr(self.ugsys, self.func_list[i])
+            if self.output_list[i]:
+                self.assertAlmostEqual(f(*self.input_args[i]), self.output_list[i], 5, 'Test in {} failed!'.format(self.testId))
+            else:
+                self.assertEqual(f(*self.input_args[i]), self.output_list[i], 'Test in {} failed!'.format(self.testId))
+        print("\n You succeed in {}! Congratulations!".format(self.testId))
+        
+
+suite = unittest.TestSuite()
+
+tokyo = [["checkIn","checkIn","checkIn","checkOut","checkOut","checkOut","getAverageTime","getAverageTime","checkIn","getAverageTime","checkOut","getAverageTime"], [[45,"Ueno",3],[32,"Shibuya",8],[27,"Ueno",10],[45,"Shinjuku",15],[27,"Shinjuku",20],[32,"Shinagawa",22],["Shibuya","Shinagawa"],["Ueno","Shinjuku"],[10,"Ueno",24],["Ueno","Shinjuku"],[10,"Shinjuku",38],["Ueno","Shinjuku"]], [None,None,None,None,None,None,14.00000,11.00000,None,11.00000,None,12.00000]]
+
+london = [["checkIn","checkOut","getAverageTime","checkIn","checkOut","getAverageTime","checkIn","checkOut","getAverageTime"], [[10,"Leyton",3],[10,"Paradise",8],["Leyton","Paradise"],[5,"Leyton",10],[5,"Paradise",16],["Leyton","Paradise"],[2,"Leyton",21],[2,"Paradise",30],["Leyton","Paradise"]], [None,None,5.00000,None,None,5.50000,None,None,6.66667]]
+
+shanghai = [["checkIn","checkIn","checkOut","checkOut","checkIn","checkIn","getAverageTime","getAverageTime","checkOut","getAverageTime","checkOut","getAverageTime"], [[1,"Lujiazui",3],[2,"Xujiahui",8],[1,"Xujiahui",10],[2,"Lujiazui",15],[1,"Xujiahui",20],[2,"Lujiazui",22],["Lujiazui","Xujiahui"],["Xujiahui","Lujiazui"],[1,"Lujiazui",24],["Xujiahui","Lujiazui"],[2,"Xujiahui",38],["Lujiazui","Xujiahui"]], [None,None,None,None,None,None,7.00000,7.00000,None,5.50000,None,11.50000]]
+
+suite.addTest(TestUndergroundSystem(*tokyo, testId = 'Tokyo'))
+suite.addTest(TestUndergroundSystem(*london, testId = 'London'))
+suite.addTest(TestUndergroundSystem(*shanghai, testId = 'Shanghai'))
+
+unittest.TextTestRunner().run(suite)
