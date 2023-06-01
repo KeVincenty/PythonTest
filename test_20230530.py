@@ -1,4 +1,53 @@
-# Design an Underground System !!
+# 0. Let's make a Smart Fridge !
+
+# This is a warm-up exercise to let you recall your knowledge about object-oriented programming (OOP).
+
+# The task is that we are going to implement a class called `SmartFridge`. The `SmartFridge` class is used by smart refrigerators to track which items are in the fridge and let owners know when an item has run out.
+
+# The class internally uses a dictionary to store items, where each key is the item name and the value is the current quantity. The `add_item` method should add the given quantity of the given item and report the current quantity. You can assume that the `use_item` method will only be called on items that are already in the fridge, and it should use up the given quantity of the given item. If the quantity would fall to or below zero, it should only use up to the remaining quantity, and remind the owner to buy more of that item.
+
+# Finish implementing the `SmartFridge` class definition so that its `add_item` and `use_item` methods work as specified by the examples below.
+
+# As for printing a string with variables, you may find Python's formatted string literals, or f-strings (https://docs.python.org/3/tutorial/inputoutput.html#fancier-output-formatting) useful. A quick example:
+# >>> feeling = 'love'
+# >>> school = 'UTokyo'
+# >>> food = 'Macaron'
+# >>> f'I {feeling} {course}!'
+# 'I love UTokyo!'
+# >>> 'I {} {}!'.format(feeling, food) # an alternate method of formatting string with variables
+# >>> 'I love Macaron!'
+
+class SmartFridge:
+    """"
+    >>> fridgey = SmartFridge()
+    >>> fridgey.add_item('Mayo', 1)
+    'I now have 1 Mayo'
+    >>> fridgey.add_item('Mayo', 2)
+    'I now have 3 Mayo'
+    >>> fridgey.use_item('Mayo', 2.5)
+    'I have 0.5 Mayo left'
+    >>> fridgey.use_item('Mayo', 0.5)
+    'Oh no, we need more Mayo!'
+    >>> fridgey.add_item('Eggs', 12)
+    'I now have 12 Eggs'
+    >>> fridgey.use_item('Eggs', 15)
+    'Oh no, we need more Eggs!'
+    >>> fridgey.add_item('Eggs', 1)
+    'I now have 1 Eggs'
+    """
+
+    def __init__(self):
+        self.items = {}
+
+    def add_item(self, item, quantity):
+        "*** YOUR CODE HERE ***"
+
+    def use_item(self, item, quantity):
+        "*** YOUR CODE HERE ***"
+
+# You can try to write some test cases by yourself to test whether your codes are correct. Using test cases to test and debug your codes is the MOST important skill in coding.
+
+# 1. Design an Underground System !!
 
 # Suppose you are a software engineer in a world-wide software developing company and currently you are developing a software for underground railway systems in the major cities around the world (e.g. Tokyo Metro, Shanghai Metro). This software aims to keep track of the time that passengers spend between different stations. They are using this data to calculate the average time it takes to travel from one station to another.
 
@@ -31,22 +80,26 @@ class UndergroundSystem:
     def __init__(self):
         # Here you need to initiate some class attributes based on the variables you need to use afterwards
         # Think about what kind of data structures (list? dictionary? tuple? set? ...) you should use to keep records of passengers' id, their check-in/check-out stations and time and the time of trips from one station to another.
-        # Here I would recommend you using dictionary. Because the passengers' id, station names, etc., are all discrete values instead of continuous values. So a list whose indexing are continous numbers can not meet our needs. Besides, you may want to use nested dictionary because there are more than one kinds of keys (passengers' id and station names)
+        # Here I would recommend you using dictionary. Because the passengers' id, station names, etc., are all discrete values instead of continuous values. So a list whose indexing are continous numbers can not meet our needs. 
+        # To make the problem simpler, I will initiate the data structures needed in this class. And you need to think about how to use these data structures in the following class methods. However, if you have your own idea or you find my idea hard to follow, you can just delete my codes and write your own codes.
+
+        self.checkInTimeTables = {} # This dictionary stores the passengers' id, their check-in stations and time. But how to store so much information in one dictionary? To construct a dictionary, you should always ask yourself two questions: (1) What element should I choose to use as the keys/values? (2) What kind of data structures should I use to store the values? Here you may want to use nested dictionary (the values in the dictionary are also dictionaries) because there are more than one kinds of keys (passengers' id and station names).
+        self.tripTime = {} # This dictionary stores the time of all previous trips for all the routes from one station to another. Since we will have a lot of routes to record (e.g. "Tokyo" -> "Shibuya", "Ueno" -> "Shinjuku", "Shibuya" -> "Tokyo", etc...), what should you use as keys to distinguish different routes? And which data struture you will choose to use to store all the time of previous trips for every route? It is natural to use a list, e.g. if there are three trips for the route "Tokyo" -> "Shibuya" and the time is 10, 12, 14, then you can store them in a list like [10, 12 , 14], and it is easy to calculate the average time for "Tokyo" -> "Shibuya" according to the list. Can you think of another way or better ways to calculate the average time?
 
         pass # delete this line after you complete the codes
 
     def checkIn(self, id: int, stationName: str, t: int) -> None:
-        # This function marks that a passenger with an ID equal to `id` checks in at the station `stationName` at time `t`. Basically, this means that you should record these new information into the data structures you initiate in __init__ .
+        # This function marks that a passenger with an ID equal to `id` checks in at the station `stationName` at time `t`. Basically, this means that you should record these new information into the data structures (self.checkInTimeTables) you initiate in __init__ .
 
         pass # delete this line after you complete the codes
 
     def checkOut(self, id: int, stationName: str, t: int) -> None:
-        # This function marks that a passenger with an ID equal to `id` checks out at the station `stationName` at time `t`. Similarly, you should record these new information into the data structures you initiate in __init__ . Addtionally, when a passenger checks out at a station, it means that you can already calculate the time of the trip he has completed. And you may also want to record the time of the trip into a data structure so that you can recall them once you want to calculte the average time.
+        # This function marks that a passenger with an ID equal to `id` checks out at the station `stationName` at time `t`. However, different from the check-in, we do not initiate a data structure to store the check-out time. Why? Because when a passenger checks out at a station, it means that you can already calculate the time of the trip he has just completed. So there is no need to store the check-out time anymore. And you may also want to record the time of the trip into the data structure (self.tripTime) so that you can use them to calculte the average time.
         
         pass # delete this line after you complete the codes
 
     def getAverageTime(self, startStation: str, endStation: str) -> float:
-        # This function should return the average time it takes to travel from `startStation` to `endStation`. 
+        # This function should return the average time it takes to travel from `startStation` to `endStation`. You need to consider how to calculate the average time for the route according to the information you store in the data structure (self.tripTime).
 
         # Digress from the topic at hand, This kind of action is usually called a "query", which it aims to search or ask for some information instead of adding to or editing the existing information in this class. Once the function gets a "query" (here the "query" is (startStation, endStation) ), it will try to find "key"s in its data structures, and extract/calculate the corresponding "value" (here the "value" is the average time between startStation and endStation). You will meet "query", "key", "value" (or "q, k, v" in abbreviation) in the famous Transformer paper (https://arxiv.org/abs/1706.03762). Although they are used very differently, they actually share the same thoughts behind: you find the right "key" based on the "query", and then you extract/compute the "value" corresponding to the "key".
 
