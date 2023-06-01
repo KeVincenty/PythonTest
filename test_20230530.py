@@ -12,7 +12,7 @@
 # >>> feeling = 'love'
 # >>> school = 'UTokyo'
 # >>> food = 'Macaron'
-# >>> f'I {feeling} {course}!'
+# >>> f'I {feeling} {school}!'
 # 'I love UTokyo!'
 # >>> 'I {} {}!'.format(feeling, food) # an alternate method of formatting string with variables
 # >>> 'I love Macaron!'
